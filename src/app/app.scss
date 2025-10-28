@@ -1,0 +1,46 @@
+.container {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 0 1rem;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #ef5350, #d32f2f);
+  color: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.app-header .container {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+.app-title {
+  font-size: 1.75rem;
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.app-nav a {
+  border-bottom: 2px solid transparent;
+  color: inherit;
+  font-weight: 600;
+  padding-bottom: 0.25rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.app-nav a:hover,
+.app-nav a.is-active {
+  border-bottom-color: rgba(255, 255, 255, 0.85);
+}
+
+.app-main {
+  background: linear-gradient(180deg, #fafafa 0%, #f0f4ff 100%);
+  min-height: calc(100vh - 70px);
+  padding: 2rem 0;
+}

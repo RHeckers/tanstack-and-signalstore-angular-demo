@@ -1,2 +1,15 @@
-<app-nx-welcome></app-nx-welcome>
-<router-outlet></router-outlet>
+<header class="app-header" data-testId="app-header">
+  <div class="container">
+    <h1 class="app-title" data-testId="app-title">{{ title }}</h1>
+    <nav class="app-nav" aria-label="Main navigation" data-testId="app-nav">
+      <a routerLink="/" routerLinkActive="is-active" data-testId="nav-home-link"
+        >Overview</a
+      >
+    </nav>
+  </div>
+</header>
+<main class="app-main" data-testId="app-main">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>

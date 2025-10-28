@@ -1,0 +1,119 @@
+.pokedex {
+  display: grid;
+  gap: 2rem;
+}
+
+.pokedex__intro {
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.pokemon__paging-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+
+.pokedex__intro h2 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.pokedex__search {
+  display: grid;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.pokedex__search input {
+  border: 2px solid #c7d2fe;
+  border-radius: 999px;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pokedex__search input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  outline: none;
+}
+
+.pokedex__status {
+  color: #475569;
+  font-size: 1.05rem;
+  margin: 0;
+  text-align: center;
+}
+
+.pokedex__status--error {
+  color: #d32f2f;
+}
+
+.pokedex__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.pokedex-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pokedex-card:hover {
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+  transform: translateY(-6px);
+}
+
+.pokedex-card__link {
+  color: inherit;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  text-decoration: none;
+}
+
+.pokedex-card__media {
+  align-items: center;
+  background: radial-gradient(circle, #f2f4ff 0%, #ffffff 60%);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.pokedex-card__body h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.pokedex-card__types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pokedex-card__types li {
+  background-color: #e0e7ff;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+}

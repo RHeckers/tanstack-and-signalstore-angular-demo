@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f6fa;
+  color: #1f2933;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
