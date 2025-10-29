@@ -1,8 +1,8 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PokemonFacade } from '../../data-access/facades/pokemon.facade';
-import { NumberInput } from '../UI/number-input/number-input';
+import { PokemonFacade } from '../../../data-access/facades/pokemon.facade';
+import { NumberInput } from '../../ui/number-input/number-input';
 
 @Component({
   selector: 'app-home',
@@ -12,15 +12,15 @@ import { NumberInput } from '../UI/number-input/number-input';
   styleUrl: './home.scss',
 })
 export class Home {
-  readonly #facade = inject(PokemonFacade);
+  readonly #pokemonFacade = inject(PokemonFacade);
 
-  readonly pokemonPerPage = this.#facade.pokemonPerPage;
-  readonly activePage = this.#facade.activePage;
-  readonly totalPages = this.#facade.totalPages;
-  readonly loading = this.#facade.loading;
-  readonly error = this.#facade.error;
-  readonly pokemons = this.#facade.pokemons;
-  readonly totalPokemonCount = this.#facade.totalPokemonCount;
+  readonly pokemonPerPage = this.#pokemonFacade.pokemonPerPage;
+  readonly activePage = this.#pokemonFacade.activePage;
+  readonly totalPages = this.#pokemonFacade.totalPages;
+  readonly loading = this.#pokemonFacade.loading;
+  readonly error = this.#pokemonFacade.error;
+  readonly pokemons = this.#pokemonFacade.pokemons;
+  readonly totalPokemonCount = this.#pokemonFacade.totalPokemonCount;
 
   readonly searchTerm = signal('');
   readonly filteredPokemons = computed(() => {
@@ -39,14 +39,14 @@ export class Home {
   }
 
   onPrevPage() {
-    this.#facade.loadPrevPage();
+    this.#pokemonFacade.loadPrevPage();
   }
 
   onNextPage() {
-    this.#facade.loadNextPage();
+    this.#pokemonFacade.loadNextPage();
   }
 
   onPokemonPerPageChange(number: number) {
-    this.#facade.setPokemonPerPage(number);
+    this.#pokemonFacade.setPokemonPerPage(number);
   }
 }

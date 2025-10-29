@@ -9,25 +9,25 @@ export class PokemonFacade {
 
   readonly pokemonPerPage = this.#store.pokemonPerPage;
   readonly activePage = this.#store.activePage;
-  readonly loading = this.#queries.pokemonListQuery.isLoading;
-  readonly error = this.#queries.pokemonListQuery.error;
-  readonly hasLoadedList = this.#queries.pokemonListQuery.isSuccess;
 
-  readonly pokemons = computed(
-    () => this.#queries.pokemonListQuery.data()?.pokemon() || [],
+  readonly pokemons = this.#queries.details;
+  readonly loading = computed(() =>
+    this.#queries.detailQueries().some((q) => q.isLoading),
+  );
+  readonly error = computed(() =>
+    this.#queries
+      .detailQueries()
+      .find((q) => q.error)
+      ?.error(),
   );
 
   readonly totalPokemonCount = computed(() => {
-    return this.#queries.pokemonListQuery.data()?.totalPokemonCount() || 0;
+    return this.#queries.pokemonListDataQuery.data()?.count ?? 0;
   });
 
   readonly totalPages = computed(() =>
     Math.ceil(this.totalPokemonCount() / this.#store.pokemonPerPage()),
   );
-
-  loadPokemons() {
-    this.#queries.pokemonListQuery.refetch();
-  }
 
   setActivePage(page: number) {
     this.#store.setActivePage(page);
