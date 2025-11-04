@@ -69,7 +69,7 @@
     <div class="pokemon__page-count-controls">
       <label for="pokedex-goto-page-input">Pokemon per page:</label>
       <app-number-input
-        [value]="30"
+        [value]="pokemonPerPage()"
         (valueChange)="onPokemonPerPageChange($event)"
       />
     </div>
