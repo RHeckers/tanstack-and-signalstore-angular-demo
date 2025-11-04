@@ -2,20 +2,22 @@
   <div class="container">
     <h1 class="app-title" data-testId="app-title">{{ title }}</h1>
     <nav class="app-nav" aria-label="Main navigation" data-testId="app-nav">
-      <a
-        routerLink="/"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        data-testId="nav-home-link"
-        >Overview</a
-      >
-      <a
-        routerLink="/moves"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        data-testId="nav-moves-link"
-        >Moves</a
-      >
+      <div class="app-nav__group" role="group" aria-label="Overview and moves">
+        <a
+          routerLink="/"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          data-testId="nav-home-link"
+          >Overview</a
+        >
+        <a
+          routerLink="/moves"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          data-testId="nav-moves-link"
+          >Moves</a
+        >
+      </div>
       <a
         routerLink="/overview-2"
         routerLinkActive="is-active"

@@ -12,7 +12,7 @@ export const appRoutes: Route[] = [
         path: '',
         loadComponent: () =>
           import('./components/pages/home/home').then((m) => m.Home),
-        title: 'Mini Pokédex',
+        title: 'Pokedex overview 1',
       },
       {
         path: 'moves',
@@ -26,7 +26,7 @@ export const appRoutes: Route[] = [
     path: 'overview-2',
     loadComponent: () =>
       import('./components/pages/home/home').then((m) => m.Home),
-    title: 'Mini Pokédex',
+    title: 'Pokedex overview 2',
     providers: [PokemonFacade, PokemonQueryParamStore, PokemonQueries],
   },
   {

@@ -1,6 +1,6 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PokemonFacade } from '../../../data-access/facades/pokemon.facade';
 import { NumberInput } from '../../ui/number-input/number-input';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +14,8 @@ import { PokemonDetail } from '../../../types/pokemon.types';
 })
 export class Home {
   readonly #pokemonFacade = inject(PokemonFacade);
+
+  readonly routeTitle = inject(ActivatedRoute).snapshot.title;
 
   readonly addToCollection = this.#pokemonFacade.canAddToCollection;
   readonly activePage = this.#pokemonFacade.activePage;

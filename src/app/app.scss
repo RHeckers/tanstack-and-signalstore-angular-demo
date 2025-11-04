@@ -30,6 +30,16 @@
   gap: 1rem;
 }
 
+.app-nav__group {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0.75rem;
+  display: inline-flex;
+  gap: 1rem;
+  padding: 0rem 1.5rem;
+}
+
 .app-nav a {
   border-bottom: 2px solid transparent;
   color: inherit;
