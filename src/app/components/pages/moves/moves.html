@@ -2,78 +2,67 @@
   <header class="moves__header">
     <h2 class="moves__title" data-testId="moves-page-title">
       Moves for
-      <ng-container *ngIf="selectedType(); else noTypeLabel">
-        {{ selectedType() | titlecase }}
-      </ng-container>
+      @if (selectedType(); as type) {
+        {{ type | titlecase }}
+      } @else {
+        <span>no selected type</span>
+      }
     </h2>
     <p class="moves__subtitle" data-testId="moves-page-subtitle">
       Browse the attacks available to the currently selected Pokémon type.
     </p>
-    <ng-template #noTypeLabel>
-      <span>no selected type</span>
-    </ng-template>
   </header>
 
-  <ng-container *ngIf="hasSelectedType(); else noTypeSelected">
-    <p *ngIf="loading()" class="moves__state" data-testId="moves-loading">
-      Loading moves...
-    </p>
+  @if (loading()) {
+    <p class="moves__state" data-testId="moves-loading">Loading moves...</p>
+  }
 
-    <p
-      *ngIf="!loading() && error()"
-      class="moves__state moves__state--error"
-      data-testId="moves-error"
-    >
+  @if (!loading() && error()) {
+    <p class="moves__state moves__state--error" data-testId="moves-error">
       We couldn't load the moves. Please try selecting the type again.
     </p>
+  }
 
-    <ul
-      *ngIf="!loading() && !error()"
-      class="moves__list"
-      data-testId="moves-list"
-    >
-      <li
-        *ngFor="let move of moves()"
-        class="moves__item"
-        data-testId="moves-item"
-      >
-        <h3 class="moves__item-title">{{ move.name | titlecase }}</h3>
-        <dl class="moves__item-meta">
-          <div>
-            <dt>Type</dt>
-            <dd>
-              {{ move.type?.name ? (move.type?.name | titlecase) : 'Unknown' }}
-            </dd>
-          </div>
-          <div>
-            <dt>Damage Class</dt>
-            <dd>{{ move.damage_class.name | titlecase }}</dd>
-          </div>
-          <div>
-            <dt>Power</dt>
-            <dd>{{ move.power !== null ? move.power : '—' }}</dd>
-          </div>
-          <div>
-            <dt>Accuracy</dt>
-            <dd>{{ move.accuracy !== null ? move.accuracy + '%' : '—' }}</dd>
-          </div>
-          <div>
-            <dt>PP</dt>
-            <dd>{{ move.pp }}</dd>
-          </div>
-          <div>
-            <dt>Priority</dt>
-            <dd>{{ move.priority }}</dd>
-          </div>
-        </dl>
-        <p class="moves__item-effect">{{ moveEffect(move) }}</p>
-      </li>
+  @if (!loading() && !error()) {
+    <ul class="moves__list" data-testId="moves-list">
+      @for (move of moves(); track move) {
+        <li class="moves__item" data-testId="moves-item">
+          <h3 class="moves__item-title">{{ move.name | titlecase }}</h3>
+          <dl class="moves__item-meta">
+            <div>
+              <dt>Type</dt>
+              <dd>
+                {{
+                  move.type?.name ? (move.type?.name | titlecase) : 'Unknown'
+                }}
+              </dd>
+            </div>
+            <div>
+              <dt>Damage Class</dt>
+              <dd>{{ move.damage_class.name | titlecase }}</dd>
+            </div>
+            <div>
+              <dt>Power</dt>
+              <dd>{{ move.power !== null ? move.power : '—' }}</dd>
+            </div>
+            <div>
+              <dt>Accuracy</dt>
+              <dd>
+                {{ move.accuracy !== null ? move.accuracy + '%' : '—' }}
+              </dd>
+            </div>
+            <div>
+              <dt>PP</dt>
+              <dd>{{ move.pp }}</dd>
+            </div>
+            <div>
+              <dt>Priority</dt>
+              <dd>{{ move.priority }}</dd>
+            </div>
+          </dl>
+          <p class="moves__item-effect">{{ moveEffect(move) }}</p>
+        </li>
+      }
     </ul>
-  </ng-container>
-
-  <ng-template #noTypeSelected>
-    <p class="moves__state" data-testId="moves-no-type">
-      Select a Pokémon type on the overview page to see its moves.
-    </p>
-  </ng-template>
+  }
 </section>

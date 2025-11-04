@@ -1,3 +1,112 @@
 .my-collection {
+  display: grid;
+  gap: 2rem;
   padding: 2rem 0;
+}
+
+.my-collection__intro {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  padding: 2rem;
+}
+
+.my-collection__summary {
+  color: #475569;
+  margin: 0.5rem 0 0;
+}
+
+.my-collection__status {
+  color: #64748b;
+  font-size: 1.05rem;
+  margin: 0;
+  text-align: center;
+}
+
+.my-collection__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.my-collection-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.my-collection-card:hover {
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+  transform: translateY(-6px);
+}
+
+.my-collection-card__link {
+  color: inherit;
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  text-decoration: none;
+}
+
+.my-collection-card__media {
+  align-items: center;
+  background: radial-gradient(circle, #f2f4ff 0%, #ffffff 60%);
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  min-height: 160px;
+}
+
+.my-collection-card__body h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.my-collection-card__types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.my-collection-card__types li {
+  background-color: #e0e7ff;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+}
+
+.my-collection-card__meta {
+  border-top: 1px solid #e2e8f0;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 1rem 0 0;
+}
+
+.my-collection-card__meta div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.my-collection-card__meta dt {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.my-collection-card__meta dd {
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
 }

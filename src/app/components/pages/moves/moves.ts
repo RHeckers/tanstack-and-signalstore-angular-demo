@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { NgForOf, NgIf, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { PokemonFacade } from '../../../data-access/facades/pokemon.facade';
 import { PokemonMoveDetailApiResponse } from '../../../types/moves.types';
 
 @Component({
   selector: 'app-moves',
-  standalone: true,
-  imports: [NgIf, NgForOf, TitleCasePipe],
+  imports: [TitleCasePipe],
   templateUrl: './moves.html',
   styleUrl: './moves.scss',
 })
@@ -17,7 +16,6 @@ export class Moves {
   protected readonly loading = this.#pokemonFacade.moveDetailsListLoading;
   protected readonly error = this.#pokemonFacade.moveDetailsListError;
   protected readonly selectedType = this.#pokemonFacade.activeType;
-  protected readonly hasSelectedType = this.#pokemonFacade.hasSelectedType;
 
   protected moveEffect(move: PokemonMoveDetailApiResponse) {
     const entry = move.effect_entries.find(

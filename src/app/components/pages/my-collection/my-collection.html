@@ -1,3 +1,86 @@
-<section class="my-collection">
-  <h2>Hello world, My Collection!</h2>
+<section
+  class="my-collection"
+  aria-labelledby="my-collection-heading"
+  data-testId="my-collection-overview"
+>
+  <header class="my-collection__intro">
+    <div>
+      <h2 id="my-collection-heading">Your Pokemon Collection</h2>
+      <p class="my-collection__summary" data-testId="collection-summary">
+        @if (hasCollection()) {
+          You have {{ collectionCount() }} Pokemon in your collection.
+        } @else {
+          You have not added any Pokemon yet.
+        }
+      </p>
+    </div>
+  </header>
+
+  @if (!hasCollection()) {
+    <p class="my-collection__status" data-testId="collection-empty">
+      Start exploring the Pokedex and add your favorite Pokemon to build your
+      personal collection.
+    </p>
+  } @else {
+    <section
+      class="my-collection__grid"
+      aria-live="polite"
+      data-testId="collection-grid"
+    >
+      @for (pokemon of collection(); track pokemon.id) {
+        <article class="my-collection-card" data-testId="collection-card">
+          <a
+            [routerLink]="['/pokemon', pokemon.name]"
+            class="my-collection-card__link"
+            data-testId="collection-card-link"
+          >
+            <figure class="my-collection-card__media">
+              <img
+                [src]="pokemon.image"
+                [alt]="pokemon.name | titlecase"
+                width="160"
+                height="160"
+                loading="lazy"
+                data-testId="collection-card-image"
+              />
+            </figure>
+            <div class="my-collection-card__body">
+              <h3 data-testId="collection-card-name">
+                {{ pokemon.name | titlecase }}
+              </h3>
+
+              @if (pokemon.types.length) {
+                <ul
+                  class="my-collection-card__types"
+                  data-testId="collection-card-types"
+                >
+                  @for (type of pokemon.types; track type) {
+                    <li>{{ type | titlecase }}</li>
+                  }
+                </ul>
+              }
+
+              <dl
+                class="my-collection-card__meta"
+                data-testId="collection-card-meta"
+              >
+                <div>
+                  <dt>Height</dt>
+                  <dd>{{ pokemon.heightMeters }} m</dd>
+                </div>
+                <div>
+                  <dt>Weight</dt>
+                  <dd>{{ pokemon.weightKilograms }} kg</dd>
+                </div>
+                <div>
+                  <dt>Base EXP</dt>
+                  <dd>{{ pokemon.baseExperience }}</dd>
+                </div>
+              </dl>
+            </div>
+          </a>
+        </article>
+      }
+    </section>
+  }
 </section>

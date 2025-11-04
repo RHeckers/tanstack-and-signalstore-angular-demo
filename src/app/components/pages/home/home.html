@@ -27,14 +27,52 @@
     </div>
   </header>
 
-  <section>
-    <label for="add-collection-toggle">Add to collection: </label>
-    <input
-      type="checkbox"
-      id="type-toggle"
-      [(ngModel)]="addToCollection"
-      data-testId="add-collection-toggle"
-    />
+  <section class="pokedex__collection-toggle">
+    <label class="toggle" for="add-collection-toggle">
+      <span class="toggle__label">Add to collection</span>
+      <span class="toggle__track">
+        <input
+          type="checkbox"
+          id="add-collection-toggle"
+          class="toggle__input"
+          [(ngModel)]="addToCollection"
+          data-testId="add-collection-toggle"
+        />
+        <span class="toggle__slider" aria-hidden="true"></span>
+      </span>
+    </label>
+  </section>
+
+  <section class="pokemon__controls-container">
+    <div class="pokemon__paging-controls">
+      <button
+        class="pokedex__page-button"
+        data-testId="pokedex-prev-page"
+        (click)="onPrevPage()"
+        [disabled]="activePage() === 1"
+      >
+        Previous
+      </button>
+      <span data-testId="pokedex-current-page">
+        Page {{ activePage() }} of {{ totalPages() }}
+      </span>
+      <button
+        class="pokedex__page-button"
+        data-testId="pokedex-next-page"
+        (click)="onNextPage()"
+        [disabled]="activePage() === totalPages()"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="pokemon__page-count-controls">
+      <label for="pokedex-goto-page-input">Pokemon per page:</label>
+      <app-number-input
+        [value]="30"
+        (valueChange)="onPokemonPerPageChange($event)"
+      />
+    </div>
   </section>
 
   @if (loading() && !pokemons().length) {
@@ -57,12 +95,13 @@
     >
       @for (pokemon of pokemons(); track pokemon.id) {
         <article class="pokedex-card" data-testId="pokemon-card">
-          @if (addToCollection()) {
+          @if (addToCollection() && !pokemon.inCollection) {
             <button
               type="button"
               class="pokedex-card__add-button"
               aria-label="Add {{ pokemon.name | titlecase }} to collection"
               data-testId="pokemon-add-button"
+              (click)="onAddToCollection(pokemon)"
             >
               +
             </button>

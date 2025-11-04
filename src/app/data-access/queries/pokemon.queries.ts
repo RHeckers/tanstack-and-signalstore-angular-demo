@@ -13,40 +13,25 @@ export class PokemonQueries {
   readonly #pokemonService = inject(PokemonService);
   readonly #pokemonQueryStore = inject(PokemonQueryParamStore);
 
-  readonly #pokemonsFromListQuery = computed<ListApiResults[]>(
-    () => this.pokemonListDataQuery.data()?.results ?? [],
-  );
-
-  readonly #pokemonsFromTypeQuery = computed<ListApiResults[]>(
-    () => this.typeDetailsQuery.data()?.pokemon?.map((p) => p.pokemon) ?? [],
-  );
-
   readonly #movesFromTypeQuery = computed<ListApiResults[]>(
     () => this.typeDetailsQuery.data()?.moves ?? [],
   );
 
-  readonly #pokemonForDetailQuery = computed(() =>
-    this.#pokemonsFromTypeQuery().length > 0
-      ? this.#pokemonsFromTypeQuery()
-      : this.#pokemonsFromListQuery(),
+  readonly pokemonByType = computed(
+    () => this.typeDetailsQuery.data()?.pokemon?.map((p) => p.pokemon) ?? [],
   );
 
-  readonly pokemonListDataQuery = injectQuery(() => ({
-    queryKey: [
-      'pokemons',
-      this.#pokemonQueryStore.activePage(),
-      this.#pokemonQueryStore.itemsPerPage(),
-    ],
-    queryFn: () =>
-      this.#pokemonService.loadPokemonListData(
-        this.#pokemonQueryStore.activePage(),
-        this.#pokemonQueryStore.itemsPerPage(),
-      ),
-    placeholderData: keepPreviousData,
-  }));
+  readonly #pagedPokemonsFromTypeQuery = computed<ListApiResults[]>(() => {
+    const page = this.#pokemonQueryStore.activePage();
+    const perPage = this.#pokemonQueryStore.itemsPerPage();
+    const startIndex = (page - 1) * perPage;
+    const pokemonsByType = this.pokemonByType();
+
+    return pokemonsByType.slice(startIndex, startIndex + perPage);
+  });
 
   readonly detailQueries = injectQueries(() => ({
-    queries: this.#pokemonForDetailQuery().map((pokemon) => ({
+    queries: this.#pagedPokemonsFromTypeQuery().map((pokemon) => ({
       queryKey: ['pokemon', pokemon.name],
       queryFn: () => this.#pokemonService.loadPokemon(pokemon.url),
       staleTime: 60_000,
@@ -71,3 +56,25 @@ export class PokemonQueries {
     placeholderData: keepPreviousData,
   }));
 }
+
+// Temporary removed code:
+
+// readonly #pokemonsFromListQuery = computed<ListApiResults[]>(
+//   () => this.pokemonListDataQuery.data()?.results ?? [],
+// );
+
+// readonly #pokemonForDetailQuery = computed(() => this.#pokemonsFromTypeQuery());
+
+// readonly pokemonListDataQuery = injectQuery(() => ({
+//   queryKey: [
+//     'pokemons',
+//     this.#pokemonQueryStore.activePage(),
+//     this.#pokemonQueryStore.itemsPerPage(),
+//   ],
+//   queryFn: () =>
+//     this.#pokemonService.loadPokemonListData(
+//       this.#pokemonQueryStore.activePage(),
+//       this.#pokemonQueryStore.itemsPerPage(),
+//     ),
+//   placeholderData: keepPreviousData,
+// }));

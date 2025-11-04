@@ -14,6 +14,7 @@ export type PokemonDetail = PokemonSummary & {
   abilities: string[];
   baseExperience: number;
   stats: Array<{ label: string; value: number }>;
+  inCollection?: boolean;
 };
 
 export type PokemonDetails = {
@@ -42,6 +43,7 @@ export type PokemonDetailApiResponse = {
   types: Array<{ type: { name: string } }>;
   abilities: Array<{ ability: { name: string } }>;
   stats: Array<{ base_stat: number; stat: { name: string } }>;
+  inCollection?: boolean;
 };
 
 export type PokemonTypeApiResponse = {

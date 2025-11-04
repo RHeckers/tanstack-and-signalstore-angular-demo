@@ -4,33 +4,42 @@ import { PokemonQueryParamStore } from '../stores/pokemon-query-param.store';
 import { PokemonMapper } from '../../utils/pokemon-mapper';
 import { PokemonMetaStore } from '../stores/pokemon-meta.store';
 import { PokemonMoveDetailApiResponse } from '../../types/moves.types';
+import { CollectionStore } from '../stores/collection.store';
+import { PokemonDetail } from '../../types/pokemon.types';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonFacade {
   readonly #queries = inject(PokemonQueries);
   readonly #pokemonQueryParamStore = inject(PokemonQueryParamStore);
   readonly #pokemonMetaStore = inject(PokemonMetaStore);
+  readonly #pokemonCollectionStore = inject(CollectionStore);
 
   readonly activePage = this.#pokemonQueryParamStore.activePage;
   readonly pokemonPerPage = this.#pokemonQueryParamStore.itemsPerPage;
   readonly activeType = this.#pokemonQueryParamStore.selectedType;
   readonly pokemonTypesLoading = this.#pokemonMetaStore.typesLoading;
+  readonly collection = this.#pokemonCollectionStore.pokemons;
+  readonly canAddToCollection = this.#pokemonCollectionStore.addToCollection;
+
+  readonly collectionCount = computed(() => this.collection().length);
 
   readonly pokemonTypes = computed(() =>
     this.#pokemonMetaStore.types.results().map((t) => t.name),
   );
-
-  readonly hasSelectedType = computed(() => {
-    const type = this.#pokemonQueryParamStore.selectedType();
-    return !!type && type.trim().length > 0;
-  });
 
   readonly pokemonDetailsList = computed(() => {
     if (this.loadingOrErrorOnDetails()) return [];
 
     return this.#queries
       .detailQueries()
-      .map((r) => r.data())
+      .map((r) => {
+        const data = r.data();
+        if (!data) return null;
+
+        data.inCollection = this.collection().some((p) => p.id === data.id);
+
+        return data;
+      })
       .filter(Boolean)
       .map(PokemonMapper.mapDetail);
   });
@@ -50,17 +59,15 @@ export class PokemonFacade {
       ?.error(),
   );
 
-  readonly totalPokemonCount = computed(() => {
-    return this.#pokemonQueryParamStore.selectedType()
-      ? this.pokemonDetailsList().length
-      : (this.#queries.pokemonListDataQuery.data()?.count ?? 0);
-  });
-
-  readonly totalPages = computed(() =>
-    Math.ceil(
-      this.totalPokemonCount() / this.#pokemonQueryParamStore.itemsPerPage(),
-    ),
+  readonly totalPokemonCount = computed(
+    () => this.#queries.pokemonByType().length ?? 0,
   );
+
+  readonly totalPages = computed(() => {
+    return Math.ceil(
+      this.totalPokemonCount() / this.#pokemonQueryParamStore.itemsPerPage(),
+    );
+  });
 
   readonly moveDetailsListLoading = computed(() =>
     this.#queries.moveDetailQueries().some((query) => query.isLoading()),
@@ -74,10 +81,6 @@ export class PokemonFacade {
   );
 
   readonly moveDetailsList = computed<PokemonMoveDetailApiResponse[]>(() => {
-    if (!this.hasSelectedType()) {
-      return [];
-    }
-
     if (this.moveDetailsListLoading() || this.moveDetailsListError()) {
       return [];
     }
@@ -93,11 +96,25 @@ export class PokemonFacade {
   }
 
   setPokemonPerPage(count: number) {
+    const totalPages = Math.ceil(this.totalPokemonCount() / count);
+    if (this.#pokemonQueryParamStore.activePage() > totalPages) {
+      this.setActivePage(totalPages);
+    }
+
     this.#pokemonQueryParamStore.setItemsPerPage(count);
   }
 
   setSelectedType(type: string) {
+    this.setActivePage(1);
     this.#pokemonQueryParamStore.setSelectedType(type);
+  }
+
+  addToCollection(pokemon: PokemonDetail) {
+    this.#pokemonCollectionStore.addPokemonToCollection(pokemon);
+  }
+
+  setAddToCollection(add: boolean) {
+    this.#pokemonCollectionStore.setAddToCollection(add);
   }
 
   loadNextPage() {

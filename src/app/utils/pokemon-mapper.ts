@@ -25,6 +25,7 @@ export class PokemonMapper {
         label: stat.stat.name,
         value: stat.base_stat,
       })),
+      inCollection: api.inCollection ?? false,
     };
   }
 
