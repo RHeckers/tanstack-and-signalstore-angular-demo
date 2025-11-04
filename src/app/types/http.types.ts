@@ -6,3 +6,8 @@ export type HtppQueryParams =
       string,
       string | number | boolean | ReadonlyArray<string | number | boolean>
     >;
+
+export type ListApiResults = {
+  name: string;
+  url: string;
+};

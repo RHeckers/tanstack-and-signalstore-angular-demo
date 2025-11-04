@@ -86,10 +86,45 @@
   background: #ffffff;
   border-radius: 18px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+  position: relative;
   overflow: hidden;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.pokedex-card__add-button {
+  align-items: center;
+  background-color: #817dd8;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.25rem;
+  height: 2.5rem;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 2.5rem;
+  z-index: 1;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pokedex-card__add-button:focus,
+.pokedex-card__add-button:hover {
+  background-color: #4338ca;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
+  transform: translateY(-2px);
+}
+
+.pokedex-card__add-button:focus {
+  outline: 3px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 2px;
 }
 
 .pokedex-card:hover {

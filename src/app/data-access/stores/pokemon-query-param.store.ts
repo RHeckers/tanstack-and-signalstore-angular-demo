@@ -1,22 +1,16 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { PokemonQueryParamState } from '../../types/pokemon.types';
+import { withQPageParams } from './page-param-feature.store';
+import { PokemonQueryParamState } from '../../types/query.types';
 
 const initialState: PokemonQueryParamState = {
-  activePage: 1,
-  pokemonPerPage: 30,
   selectedType: null,
 };
 
 export const PokemonQueryParamStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withQPageParams(),
   withMethods((store) => ({
-    setActivePage(page: number) {
-      patchState(store, { activePage: page });
-    },
-    setPokemonPerPage(count: number) {
-      patchState(store, { pokemonPerPage: count });
-    },
     setSelectedType(type: string) {
       patchState(store, { selectedType: type });
     },

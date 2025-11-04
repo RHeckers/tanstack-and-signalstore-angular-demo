@@ -9,53 +9,68 @@
     </div>
   </header>
 
-  <section class="pokemon__controls-container">
-    <div class="pokemon__paging-controls">
-      <button
-        class="pokedex__page-button"
-        data-testId="pokedex-prev-page"
-        (click)="onPrevPage()"
-        [disabled]="activePage() === 1"
-      >
-        Previous
-      </button>
-      <span data-testId="pokedex-current-page">
-        Page {{ activePage() }} of {{ totalPages() }}
-      </span>
-      <button
-        class="pokedex__page-button"
-        data-testId="pokedex-next-page"
-        (click)="onNextPage()"
-        [disabled]="activePage() === totalPages()"
-      >
-        Next
-      </button>
-    </div>
-
-    <div class="pokemon__type-controls">
-      <label for="pokedex-type-filter-select">Filter by type:</label>
-      <select
-        id="pokedex-type-filter-select"
-        (change)="onTypeFilterChange($event)"
-        data-testId="pokedex-type-filter"
-      >
-        <option value="">All types</option>
-        @for (type of types(); track type) {
-          <option [value]="type">
-            {{ type | titlecase }}
-          </option>
-        }
-      </select>
-    </div>
-
-    <div class="pokemon__page-count-controls">
-      <label for="pokedex-goto-page-input">Pokemon per page:</label>
-      <app-number-input
-        [maxValue]="totalPokemonCount()"
-        [value]="30"
-        (valueChange)="onPokemonPerPageChange($event)"
+  <section>
+    <section>
+      <label for="type-toggle">Search by type: </label>
+      <input
+        type="checkbox"
+        id="type-toggle"
+        [ngModel]="seachByType()"
+        (ngModelChange)="onSearchByTypeToggle()"
+        data-testId="type-toggle"
       />
-    </div>
+    </section>
+
+    <section class="pokemon__controls-container">
+      @if (seachByType()) {
+        <div class="pokemon__type-controls">
+          <label for="pokedex-type-filter-select">Filter by type:</label>
+          <select
+            id="pokedex-type-filter-select"
+            [ngModel]="activeType()"
+            (change)="onTypeFilterChange($event)"
+            data-testId="pokedex-type-filter"
+          >
+            @for (type of types(); track type) {
+              <option [value]="type">
+                {{ type | titlecase }}
+              </option>
+            }
+          </select>
+        </div>
+      } @else {
+        <div class="pokemon__paging-controls">
+          <button
+            class="pokedex__page-button"
+            data-testId="pokedex-prev-page"
+            (click)="onPrevPage()"
+            [disabled]="activePage() === 1"
+          >
+            Previous
+          </button>
+          <span data-testId="pokedex-current-page">
+            Page {{ activePage() }} of {{ totalPages() }}
+          </span>
+          <button
+            class="pokedex__page-button"
+            data-testId="pokedex-next-page"
+            (click)="onNextPage()"
+            [disabled]="activePage() === totalPages()"
+          >
+            Next
+          </button>
+        </div>
+
+        <div class="pokemon__page-count-controls">
+          <label for="pokedex-goto-page-input">Pokemon per page:</label>
+          <app-number-input
+            [maxValue]="totalPokemonCount()"
+            [value]="30"
+            (valueChange)="onPokemonPerPageChange($event)"
+          />
+        </div>
+      }
+    </section>
   </section>
 
   @if (loading() && !pokemons().length) {
@@ -71,50 +86,52 @@
       {{ error() }}
     </p>
   } @else {
-    @if (pokemons().length === 0) {
-      <p class="pokedex__status" data-testId="pokedex-empty">
-        No Pokémon match your search.
-      </p>
-    } @else {
-      <section
-        class="pokedex__grid"
-        aria-live="polite"
-        data-testId="pokedex-grid"
-      >
-        @for (pokemon of pokemons(); track pokemon.id) {
-          <article class="pokedex-card" data-testId="pokemon-card">
-            <a
-              [routerLink]="['/pokemon', pokemon.name]"
-              class="pokedex-card__link"
-              data-testId="pokemon-link"
-            >
-              <figure class="pokedex-card__media">
-                <img
-                  [src]="pokemon.image"
-                  [alt]="pokemon.name | titlecase"
-                  aria-label="Pokemon image"
-                  width="160"
-                  height="160"
-                  loading="lazy"
-                  data-testId="pokemon-image"
-                />
-              </figure>
-              <div class="pokedex-card__body">
-                <h3 data-testId="pokemon-name">
-                  {{ pokemon.name | titlecase }}
-                </h3>
-                @if (pokemon.types.length > 0) {
-                  <ul class="pokedex-card__types" data-testId="pokemon-types">
-                    @for (type of pokemon.types; track type) {
-                      <li data-testId="pokemon-type">{{ type | titlecase }}</li>
-                    }
-                  </ul>
-                }
-              </div>
-            </a>
-          </article>
-        }
-      </section>
-    }
+    <section
+      class="pokedex__grid"
+      aria-live="polite"
+      data-testId="pokedex-grid"
+    >
+      @for (pokemon of pokemons(); track pokemon.id) {
+        <article class="pokedex-card" data-testId="pokemon-card">
+          <button
+            type="button"
+            class="pokedex-card__add-button"
+            aria-label="Add {{ pokemon.name | titlecase }} to collection"
+            data-testId="pokemon-add-button"
+          >
+            +
+          </button>
+          <a
+            [routerLink]="['/pokemon', pokemon.name]"
+            class="pokedex-card__link"
+            data-testId="pokemon-link"
+          >
+            <figure class="pokedex-card__media">
+              <img
+                [src]="pokemon.image"
+                [alt]="pokemon.name | titlecase"
+                aria-label="Pokemon image"
+                width="160"
+                height="160"
+                loading="lazy"
+                data-testId="pokemon-image"
+              />
+            </figure>
+            <div class="pokedex-card__body">
+              <h3 data-testId="pokemon-name">
+                {{ pokemon.name | titlecase }}
+              </h3>
+              @if (pokemon.types.length > 0) {
+                <ul class="pokedex-card__types" data-testId="pokemon-types">
+                  @for (type of pokemon.types; track type) {
+                    <li data-testId="pokemon-type">{{ type | titlecase }}</li>
+                  }
+                </ul>
+              }
+            </div>
+          </a>
+        </article>
+      }
+    </section>
   }
 </section>

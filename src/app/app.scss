@@ -25,6 +25,11 @@
   text-transform: uppercase;
 }
 
+.app-nav {
+  display: flex;
+  gap: 1rem;
+}
+
 .app-nav a {
   border-bottom: 2px solid transparent;
   color: inherit;

@@ -1,4 +1,5 @@
 import { Signal } from '@angular/core';
+import { ListApiResults } from './http.types';
 
 export type PokemonSummary = {
   id: number;
@@ -45,13 +46,7 @@ export type PokemonDetailApiResponse = {
 
 export type PokemonTypeApiResponse = {
   count: number;
-  results: Array<{ name: string; url: string }>;
-};
-
-export type PokemonQueryParamState = {
-  activePage: number;
-  pokemonPerPage: number;
-  selectedType: string | null;
+  results: Array<ListApiResults>;
 };
 
 export type PokemonMetaState = {

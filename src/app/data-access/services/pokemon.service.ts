@@ -4,9 +4,9 @@ import { firstValueFrom } from 'rxjs';
 import {
   PokemonListApiResponse,
   PokemonDetailApiResponse,
-  PokemonTypeApiResponse,
 } from '../../types/pokemon.types';
 import { HtppQueryParams } from '../../types/http.types';
+import { PokemonMoveDetailApiResponse } from '../../types/moves.types';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -29,6 +29,10 @@ export class PokemonService {
 
   async loadPokemon(url: string) {
     return this.getAsPromise<PokemonDetailApiResponse>(url);
+  }
+
+  async loadMoveDetails(url: string) {
+    return this.getAsPromise<PokemonMoveDetailApiResponse>(url);
   }
 
   async loadPokemonByName(name: string) {

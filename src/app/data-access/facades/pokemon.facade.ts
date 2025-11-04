@@ -11,7 +11,7 @@ export class PokemonFacade {
   readonly #pokemonMetaStore = inject(PokemonMetaStore);
 
   readonly activePage = this.#pokemonQueryParamStore.activePage;
-  readonly pokemonPerPage = this.#pokemonQueryParamStore.pokemonPerPage;
+  readonly pokemonPerPage = this.#pokemonQueryParamStore.itemsPerPage;
   readonly activeType = this.#pokemonQueryParamStore.selectedType;
   readonly pokemonTypesLoading = this.#pokemonMetaStore.typesLoading;
 
@@ -52,7 +52,7 @@ export class PokemonFacade {
 
   readonly totalPages = computed(() =>
     Math.ceil(
-      this.totalPokemonCount() / this.#pokemonQueryParamStore.pokemonPerPage(),
+      this.totalPokemonCount() / this.#pokemonQueryParamStore.itemsPerPage(),
     ),
   );
 
@@ -61,7 +61,7 @@ export class PokemonFacade {
   }
 
   setPokemonPerPage(count: number) {
-    this.#pokemonQueryParamStore.setPokemonPerPage(count);
+    this.#pokemonQueryParamStore.setItemsPerPage(count);
   }
 
   setSelectedType(type: string) {

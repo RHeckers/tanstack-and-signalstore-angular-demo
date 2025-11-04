@@ -6,54 +6,67 @@ import {
 import { PokemonService } from '../services/pokemon.service';
 import { PokemonQueryParamStore } from '../stores/pokemon-query-param.store';
 import { injectQueries } from '@tanstack/angular-query-experimental/inject-queries-experimental';
+import { ListApiResults } from '../../types/http.types';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonQueries {
   readonly #pokemonService = inject(PokemonService);
-  readonly #pokemonStore = inject(PokemonQueryParamStore);
+  readonly #pokemonQueryStore = inject(PokemonQueryParamStore);
 
-  readonly #pokemonsFromListQuery = computed(
+  readonly #pokemonsFromListQuery = computed<ListApiResults[]>(
     () => this.pokemonListDataQuery.data()?.results ?? [],
   );
 
-  readonly #pokemonsFromTypeQuery = computed(
-    () => this.pokemonByTypeQuery.data()?.pokemon ?? [],
+  readonly #pokemonsFromTypeQuery = computed<ListApiResults[]>(
+    () => this.typeDetailsQuery.data()?.pokemon.map((p) => p.pokemon) ?? [],
+  );
+
+  readonly #movesFromTypeQuery = computed<ListApiResults[]>(
+    () => this.typeDetailsQuery.data()?.moves ?? [],
   );
 
   readonly #pokemonForDetailQuery = computed(() =>
     this.#pokemonsFromTypeQuery().length > 0
-      ? this.#pokemonsFromTypeQuery().map((p) => p.pokemon)
+      ? this.#pokemonsFromTypeQuery()
       : this.#pokemonsFromListQuery(),
   );
 
   readonly pokemonListDataQuery = injectQuery(() => ({
     queryKey: [
       'pokemons',
-      this.#pokemonStore.activePage(),
-      this.#pokemonStore.pokemonPerPage(),
+      this.#pokemonQueryStore.activePage(),
+      this.#pokemonQueryStore.itemsPerPage(),
     ],
     queryFn: () =>
       this.#pokemonService.loadPokemonListData(
-        this.#pokemonStore.activePage(),
-        this.#pokemonStore.pokemonPerPage(),
+        this.#pokemonQueryStore.activePage(),
+        this.#pokemonQueryStore.itemsPerPage(),
       ),
     placeholderData: keepPreviousData,
   }));
 
   readonly detailQueries = injectQueries(() => ({
-    queries: this.#pokemonForDetailQuery().map((item) => ({
-      queryKey: ['pokemon', item.name],
-      queryFn: () => this.#pokemonService.loadPokemon(item.url),
+    queries: this.#pokemonForDetailQuery().map((pokemon) => ({
+      queryKey: ['pokemon', pokemon.name],
+      queryFn: () => this.#pokemonService.loadPokemon(pokemon.url),
       staleTime: 60_000,
     })),
   }));
 
-  readonly pokemonByTypeQuery = injectQuery(() => ({
-    enabled: this.#pokemonStore.selectedType() !== null,
-    queryKey: ['pokemon-by-type', this.#pokemonStore.selectedType()],
+  readonly moveDetailQueries = injectQueries(() => ({
+    queries: this.#movesFromTypeQuery().map((move) => ({
+      queryKey: ['move', move.name],
+      queryFn: () => this.#pokemonService.loadMoveDetails(move.url),
+      staleTime: 60_000,
+    })),
+  }));
+
+  readonly typeDetailsQuery = injectQuery(() => ({
+    enabled: this.#pokemonQueryStore.selectedType() !== null,
+    queryKey: ['pokemon-by-type', this.#pokemonQueryStore.selectedType()],
     queryFn: () =>
       this.#pokemonService.loadPokemonsByType(
-        this.#pokemonStore.selectedType(),
+        this.#pokemonQueryStore.selectedType(),
       ),
     placeholderData: keepPreviousData,
   }));

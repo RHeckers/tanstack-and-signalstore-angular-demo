@@ -2,8 +2,19 @@
   <div class="container">
     <h1 class="app-title" data-testId="app-title">{{ title }}</h1>
     <nav class="app-nav" aria-label="Main navigation" data-testId="app-nav">
-      <a routerLink="/" routerLinkActive="is-active" data-testId="nav-home-link"
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        data-testId="nav-home-link"
         >Overview</a
+      >
+      <a
+        routerLink="/my-collection"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        data-testId="nav-my-collection-link"
+        >My Collection</a
       >
     </nav>
   </div>
