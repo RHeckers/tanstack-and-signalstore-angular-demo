@@ -18,7 +18,7 @@ export class PokemonQueries {
   );
 
   readonly #pokemonsFromTypeQuery = computed<ListApiResults[]>(
-    () => this.typeDetailsQuery.data()?.pokemon.map((p) => p.pokemon) ?? [],
+    () => this.typeDetailsQuery.data()?.pokemon?.map((p) => p.pokemon) ?? [],
   );
 
   readonly #movesFromTypeQuery = computed<ListApiResults[]>(

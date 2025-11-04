@@ -3,7 +3,7 @@ import { withQPageParams } from './page-param-feature.store';
 import { PokemonQueryParamState } from '../../types/query.types';
 
 const initialState: PokemonQueryParamState = {
-  selectedType: null,
+  selectedType: 'normal',
 };
 
 export const PokemonQueryParamStore = signalStore(

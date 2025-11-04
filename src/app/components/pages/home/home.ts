@@ -1,21 +1,20 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PokemonFacade } from '../../../data-access/facades/pokemon.facade';
-import { NumberInput } from '../../ui/number-input/number-input';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TitleCasePipe, NumberInput, FormsModule],
+  imports: [RouterLink, TitleCasePipe, FormsModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   readonly #pokemonFacade = inject(PokemonFacade);
 
-  readonly seachByType = signal(false);
+  readonly addToCollection = signal<boolean>(false);
 
   readonly pokemonPerPage = this.#pokemonFacade.pokemonPerPage;
   readonly activePage = this.#pokemonFacade.activePage;
@@ -42,16 +41,5 @@ export class Home {
   onTypeFilterChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.#pokemonFacade.setSelectedType(value);
-  }
-
-  onSearchByTypeToggle() {
-    this.seachByType.update((current) => !current);
-
-    if (!this.seachByType()) {
-      this.#pokemonFacade.setSelectedType('');
-      return;
-    }
-
-    this.#pokemonFacade.setSelectedType(this.types()[0]);
   }
 }

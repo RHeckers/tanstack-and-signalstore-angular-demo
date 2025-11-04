@@ -10,6 +10,13 @@
         >Overview</a
       >
       <a
+        routerLink="/moves"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        data-testId="nav-moves-link"
+        >Moves</a
+      >
+      <a
         routerLink="/my-collection"
         routerLinkActive="is-active"
         [routerLinkActiveOptions]="{ exact: true }"

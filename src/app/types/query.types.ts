@@ -4,5 +4,5 @@ export type QueryParamState = {
 };
 
 export type PokemonQueryParamState = {
-  selectedType: string | null;
+  selectedType: string;
 };
