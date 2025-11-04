@@ -43,7 +43,17 @@ export type PokemonDetailApiResponse = {
   stats: Array<{ base_stat: number; stat: { name: string } }>;
 };
 
-export type PokemonState = {
+export type PokemonTypeApiResponse = {
+  count: number;
+  results: Array<{ name: string; url: string }>;
+};
+
+export type PokemonQueryParamState = {
   activePage: number;
   pokemonPerPage: number;
+  selectedType: string | null;
+};
+
+export type PokemonMetaState = {
+  types: PokemonTypeApiResponse;
 };

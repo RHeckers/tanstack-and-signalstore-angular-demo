@@ -13,6 +13,7 @@ export class NumberInput {
   value = model.required<number>();
   maxValue = input(999999);
   debounceTime = input(250);
+  disabled = input(false);
 
   valueChange = outputFromObservable(
     toObservable(this.value).pipe(

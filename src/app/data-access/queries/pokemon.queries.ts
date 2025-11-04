@@ -4,14 +4,27 @@ import {
   keepPreviousData,
 } from '@tanstack/angular-query-experimental';
 import { PokemonService } from '../services/pokemon.service';
-import { PokemonStore } from '../stores/pokemon.store';
+import { PokemonQueryParamStore } from '../stores/pokemon-query-param.store';
 import { injectQueries } from '@tanstack/angular-query-experimental/inject-queries-experimental';
-import { PokemonMapper } from '../../utils/pokemon-mapper';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonQueries {
   readonly #pokemonService = inject(PokemonService);
-  readonly #pokemonStore = inject(PokemonStore);
+  readonly #pokemonStore = inject(PokemonQueryParamStore);
+
+  readonly #pokemonsFromListQuery = computed(
+    () => this.pokemonListDataQuery.data()?.results ?? [],
+  );
+
+  readonly #pokemonsFromTypeQuery = computed(
+    () => this.pokemonByTypeQuery.data()?.pokemon ?? [],
+  );
+
+  readonly #pokemonForDetailQuery = computed(() =>
+    this.#pokemonsFromTypeQuery().length > 0
+      ? this.#pokemonsFromTypeQuery().map((p) => p.pokemon)
+      : this.#pokemonsFromListQuery(),
+  );
 
   readonly pokemonListDataQuery = injectQuery(() => ({
     queryKey: [
@@ -27,21 +40,21 @@ export class PokemonQueries {
     placeholderData: keepPreviousData,
   }));
 
-  detailQueries = injectQueries(() => {
-    const items = this.pokemonListDataQuery.data()?.results ?? [];
-    return {
-      queries: items.map((item) => ({
-        queryKey: ['pokemon', item.name],
-        queryFn: () => this.#pokemonService.loadPokemon(item.url),
-        staleTime: 60_000,
-      })),
-    };
-  });
+  readonly detailQueries = injectQueries(() => ({
+    queries: this.#pokemonForDetailQuery().map((item) => ({
+      queryKey: ['pokemon', item.name],
+      queryFn: () => this.#pokemonService.loadPokemon(item.url),
+      staleTime: 60_000,
+    })),
+  }));
 
-  details = computed(() =>
-    this.detailQueries()
-      .map((r) => r.data())
-      .filter(Boolean)
-      .map(PokemonMapper.mapDetail),
-  );
+  readonly pokemonByTypeQuery = injectQuery(() => ({
+    enabled: this.#pokemonStore.selectedType() !== null,
+    queryKey: ['pokemon-by-type', this.#pokemonStore.selectedType()],
+    queryFn: () =>
+      this.#pokemonService.loadPokemonsByType(
+        this.#pokemonStore.selectedType(),
+      ),
+    placeholderData: keepPreviousData,
+  }));
 }

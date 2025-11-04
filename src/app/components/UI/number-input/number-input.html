@@ -1,1 +1,7 @@
-<input type="number" min="3" [max]="maxValue()" [(ngModel)]="value" />
+<input
+  type="number"
+  min="3"
+  [disabled]="disabled()"
+  [max]="maxValue()"
+  [(ngModel)]="value"
+/>

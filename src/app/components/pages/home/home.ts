@@ -17,26 +17,12 @@ export class Home {
   readonly pokemonPerPage = this.#pokemonFacade.pokemonPerPage;
   readonly activePage = this.#pokemonFacade.activePage;
   readonly totalPages = this.#pokemonFacade.totalPages;
-  readonly loading = this.#pokemonFacade.loading;
-  readonly error = this.#pokemonFacade.error;
-  readonly pokemons = this.#pokemonFacade.pokemons;
+  readonly loading = this.#pokemonFacade.pokemonDetailsListLoading;
+  readonly error = this.#pokemonFacade.pokemonDetailsListError;
+  readonly pokemons = this.#pokemonFacade.pokemonDetailsList;
   readonly totalPokemonCount = this.#pokemonFacade.totalPokemonCount;
-
-  readonly searchTerm = signal('');
-  readonly filteredPokemons = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
-    if (!term) {
-      return this.pokemons();
-    }
-    return this.pokemons().filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(term),
-    );
-  });
-
-  onSearch(event: Event) {
-    const target = event.target as HTMLInputElement | null;
-    this.searchTerm.set(target?.value ?? '');
-  }
+  readonly types = this.#pokemonFacade.pokemonTypes;
+  readonly activeType = this.#pokemonFacade.activeType;
 
   onPrevPage() {
     this.#pokemonFacade.loadPrevPage();
@@ -48,5 +34,10 @@ export class Home {
 
   onPokemonPerPageChange(number: number) {
     this.#pokemonFacade.setPokemonPerPage(number);
+  }
+
+  onTypeFilterChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.#pokemonFacade.setSelectedType(value);
   }
 }

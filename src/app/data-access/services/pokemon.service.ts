@@ -4,37 +4,48 @@ import { firstValueFrom } from 'rxjs';
 import {
   PokemonListApiResponse,
   PokemonDetailApiResponse,
+  PokemonTypeApiResponse,
 } from '../../types/pokemon.types';
+import { HtppQueryParams } from '../../types/http.types';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
   readonly #http = inject(HttpClient);
   readonly #apiUrl = 'https://pokeapi.co/api/v2';
 
-  async loadPokemonListData(page, limit): Promise<PokemonListApiResponse> {
+  async loadPokemonListData(
+    page: number,
+    limit: number,
+  ): Promise<PokemonListApiResponse> {
     const offset = (page - 1) * limit;
-    return firstValueFrom(
-      this.#http.get<PokemonListApiResponse>(`${this.#apiUrl}/pokemon`, {
-        params: { limit, offset },
-      }),
+    return this.getAsPromise<PokemonListApiResponse>(
+      `${this.#apiUrl}/pokemon`,
+      {
+        limit,
+        offset,
+      },
     );
   }
 
   async loadPokemon(url: string) {
-    return firstValueFrom(this.#http.get<PokemonDetailApiResponse>(url));
+    return this.getAsPromise<PokemonDetailApiResponse>(url);
   }
 
   async loadPokemonByName(name: string) {
-    const normalised = this.normaliseName(name);
-
-    return firstValueFrom(
-      this.#http.get<PokemonDetailApiResponse>(
-        `${this.#apiUrl}/pokemon/${normalised}`,
-      ),
+    return this.getAsPromise<PokemonDetailApiResponse>(
+      `${this.#apiUrl}/pokemon/${this.normaliseName(name)}`,
     );
+  }
+
+  async loadPokemonsByType(type: string) {
+    return this.getAsPromise<any>(`${this.#apiUrl}/type/${type}`);
   }
 
   private normaliseName(name: string) {
     return name.trim().toLowerCase();
+  }
+
+  private getAsPromise<T>(url: string, params?: HtppQueryParams) {
+    return firstValueFrom(this.#http.get<T>(url, { params }));
   }
 }
