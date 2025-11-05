@@ -1,12 +1,14 @@
 import { Route } from '@angular/router';
-import { PokemonQueryParamStore } from './data-access/stores/pokemon-query-param.store';
-import { PokemonFacade } from './data-access/facades/pokemon.facade';
-import { PokemonQueries } from './data-access/queries/pokemon.queries';
+import { providePokemon } from './data-access/providers/pokemon.provider';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    providers: [PokemonFacade, PokemonQueryParamStore, PokemonQueries],
+    providers: [providePokemon()],
+    // loadComponent: () =>
+    //   import('./components/pages/home-moves-wrapper/home-moves-wrapper').then(
+    //     (m) => m.HomeMovesWrapper,
+    //   ),
     children: [
       {
         path: '',
@@ -27,7 +29,7 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('./components/pages/home/home').then((m) => m.Home),
     title: 'Pokedex overview 2',
-    providers: [PokemonFacade, PokemonQueryParamStore, PokemonQueries],
+    providers: [providePokemon()],
   },
   {
     path: 'my-collection',

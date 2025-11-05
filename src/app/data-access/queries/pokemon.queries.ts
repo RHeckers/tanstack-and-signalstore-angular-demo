@@ -56,25 +56,3 @@ export class PokemonQueries {
     placeholderData: keepPreviousData,
   }));
 }
-
-// Temporary removed code:
-
-// readonly #pokemonsFromListQuery = computed<ListApiResults[]>(
-//   () => this.pokemonListDataQuery.data()?.results ?? [],
-// );
-
-// readonly #pokemonForDetailQuery = computed(() => this.#pokemonsFromTypeQuery());
-
-// readonly pokemonListDataQuery = injectQuery(() => ({
-//   queryKey: [
-//     'pokemons',
-//     this.#pokemonQueryStore.activePage(),
-//     this.#pokemonQueryStore.itemsPerPage(),
-//   ],
-//   queryFn: () =>
-//     this.#pokemonService.loadPokemonListData(
-//       this.#pokemonQueryStore.activePage(),
-//       this.#pokemonQueryStore.itemsPerPage(),
-//     ),
-//   placeholderData: keepPreviousData,
-// }));

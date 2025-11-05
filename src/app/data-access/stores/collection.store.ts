@@ -12,6 +12,7 @@ export const CollectionStore = signalStore(
   withState(initialState),
   withMethods((store) => ({
     addPokemonToCollection(pokemon: PokemonDetail) {
+      pokemon.inCollection = true;
       patchState(store, { pokemons: [...store.pokemons(), pokemon] });
     },
     setAddToCollection(add: boolean) {

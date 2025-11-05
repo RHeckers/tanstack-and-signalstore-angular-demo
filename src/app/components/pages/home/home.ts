@@ -46,7 +46,6 @@ export class Home {
   }
 
   onAddToCollection(pokemon: PokemonDetail) {
-    pokemon.inCollection = true;
     this.#pokemonFacade.addToCollection(pokemon);
   }
 }
