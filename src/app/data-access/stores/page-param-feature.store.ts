@@ -11,7 +11,7 @@ const initialState: QueryParamState = {
   itemsPerPage: 30,
 };
 
-export const withPageQueryParams = () =>
+export const withPageQueryParamsFeature = () =>
   signalStoreFeature(
     withState(initialState),
     withMethods((store) => ({
