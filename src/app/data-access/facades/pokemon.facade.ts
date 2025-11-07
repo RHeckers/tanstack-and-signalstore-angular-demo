@@ -31,7 +31,7 @@ export class PokemonFacade {
     if (this.loadingOrErrorOnDetails()) return [];
 
     return this.#queries
-      .detailQueries()
+      .pokemonDetailQueries()
       .map((r) => {
         const data = r.data();
         if (!data) return null;
@@ -49,12 +49,12 @@ export class PokemonFacade {
   );
 
   readonly pokemonDetailsListLoading = computed(() =>
-    this.#queries.detailQueries().some((q) => q.isLoading()),
+    this.#queries.pokemonDetailQueries().some((q) => q.isLoading()),
   );
 
   readonly pokemonDetailsListError = computed(() =>
     this.#queries
-      .detailQueries()
+      .pokemonDetailQueries()
       .find((q) => q.error())
       ?.error(),
   );

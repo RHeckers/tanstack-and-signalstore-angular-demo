@@ -30,11 +30,12 @@ export class PokemonQueries {
     return pokemonsByType.slice(startIndex, startIndex + perPage);
   });
 
-  readonly detailQueries = injectQueries(() => ({
+  readonly pokemonDetailQueries = injectQueries(() => ({
     queries: this.#pagedPokemonsFromTypeQuery().map((pokemon) => ({
       queryKey: ['pokemon', pokemon.name],
       queryFn: () => this.#pokemonService.loadPokemon(pokemon.url),
-      staleTime: 60_000,
+      staleTime: 5_000,
+      cacheTime: 30_000,
     })),
   }));
 
@@ -42,7 +43,6 @@ export class PokemonQueries {
     queries: this.#movesFromTypeQuery().map((move) => ({
       queryKey: ['move', move.name],
       queryFn: () => this.#pokemonService.loadMoveDetails(move.url),
-      staleTime: 60_000,
     })),
   }));
 
@@ -54,5 +54,8 @@ export class PokemonQueries {
         this.#pokemonQueryStore.selectedType(),
       ),
     placeholderData: keepPreviousData,
+    retry: 3,
+    retryDelay: 1000,
+    refetchIntervalInBackground: true,
   }));
 }
