@@ -34,8 +34,8 @@ export class PokemonQueries {
     queries: this.#pagedPokemonsFromTypeQuery().map((pokemon) => ({
       queryKey: ['pokemon', pokemon.name],
       queryFn: () => this.#pokemonService.loadPokemon(pokemon.url),
-      staleTime: 5_000,
-      cacheTime: 30_000,
+      staleTime: 30_000,
+      cacheTime: 60_000,
     })),
   }));
 
